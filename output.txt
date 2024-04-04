@@ -1,0 +1,204 @@
+% Find type of Annihilape monster
+?- monster(annihilape, Type).
+Type = ghost
+
+% Find monsters that are of fighting type
+?- monster(Monster, fighting).
+Monster = flamigo
+
+% Find monsters that are of ghost and psychic type
+?- monster(Monster, Type), (Type = ghost ; Type = psychic).
+Monster = annihilape,
+Type = ghost
+Monster = espathra,
+Type = psychic
+
+
+% Find moveset of Annihilape monster
+?- monsterMove(annihilape, Move).
+Move = lowKick
+Move = shadowPunch
+Move = rageFist
+Move = bodySlam
+
+% Find monsters that have the lowKick move
+?- monsterMove(Monster, lowKick).
+Monster = annihilape
+Monster = espathra
+Monster = flamigo
+
+% Find moveset of LeChonk and Flamigo monsters
+?- monsterMove(Monster, Move), (Monster = lechonk ; Monster = flamigo).
+Monster = flamigo,
+Move = lowKick
+Monster = flamigo,
+Move = payback
+Monster = flamigo,
+Move = megaKick
+Monster = flamigo,
+Move = closeCombat
+Monster = lechonk,
+Move = tackle
+Monster = lechonk,
+Move = takeDown
+Monster = lechonk,
+Move = zenHeadbutt
+Monster = lechonk,
+Move = bodySlam
+
+
+% Find effectiveness of fighting moves against normal types
+?- typeEffectiveness(Effectiveness, fighting, normal)
+Effectiveness = strong
+
+% Find effectiveness of psychic moves against ghost and fighting types
+?- typeEffectiveness(Effectiveness, psychic, Type), (Type = ghost ; Type = fighting).
+Effectiveness = strong,
+Type = fighting
+Effectiveness = ordinary,
+Type = ghost
+
+
+% Find all monsters with a normal type move, as well as which move it is
+?- monsterMoveMatch(normal, Monster1, Monster2, Move), (Monster1 = Monster2).
+Monster1 = Monster2, Monster2 = annihilape,
+Move = bodySlam
+Monster1 = Monster2, Monster2 = espathra,
+Move = quickAttack
+Monster1 = Monster2, Monster2 = flamigo,
+Move = megaKick
+Monster1 = Monster2, Monster2 = lechonk,
+Move = tackle
+Monster1 = Monster2, Monster2 = lechonk,
+Move = takeDown
+Monster1 = Monster2, Monster2 = lechonk,
+Move = bodySlam
+Monster1 = Monster2, Monster2 = mabosstiff,
+Move = bodySlam
+
+% Find all sets of 2 monsters with a shared normal type move, as well as which move it is
+?- monsterMoveMatch(normal, Monster1, Monster2, Move), (Monster1 \= Monster2).
+Monster1 = annihilape,
+Monster2 = lechonk,
+Move = bodySlam
+Monster1 = annihilape,
+Monster2 = mabosstiff,
+Move = bodySlam
+Monster1 = lechonk,
+Monster2 = annihilape,
+Move = bodySlam
+Monster1 = lechonk,
+Monster2 = mabosstiff,
+Move = bodySlam
+Monster1 = mabosstiff,
+Monster2 = annihilape,
+Move = bodySlam
+Monster1 = mabosstiff,
+Monster2 = lechonk,
+Move = bodySlam
+
+% Find all monsters with a psychic or dark type move, as well as which move it is
+?- monsterMoveMatch(Type, Monster1, Monster2, Move), (Type = psychic ; Type = dark), (Monster1 = Monster2).
+Monster1 = Monster2, Monster2 = espathra,
+Move = psybeam,
+Type = psychic
+Monster1 = Monster2, Monster2 = flamigo,
+Move = payback,
+Type = dark
+Monster1 = Monster2, Monster2 = lechonk,
+Move = zenHeadbutt,
+Type = psychic
+Monster1 = Monster2, Monster2 = mabosstiff,
+Move = snarl,
+Type = dark
+Monster1 = Monster2, Monster2 = mabosstiff,
+Move = bite,
+Type = dark
+
+% Find all sets of 2 monsters with a shared psychic or dark type move, as well as which move it is
+?- monsterMoveMatch(Type, Monster1, Monster2, Move), (Type = psychic ; Type = dark), (Monster1 \= Monster2).
+false % (no shared dark or psychic type moves)
+
+% Find all moves that are of normal type, and that are learned by both lechonk and mabosstiff
+?- monsterMoveMatch(normal, lechonk, mabosstiff, Move).
+Move = bodySlam
+
+
+% Find all moves more effective against normal types than takeDown
+?- moreEffectiveMoveType(Move1, takeDown, normal).
+Move1 = lowKick
+Move1 = closeCombat
+
+% Find all moves less effective against normal types than closeCombat
+?- moreEffectiveMoveType(closeCombat, Move2, normal).
+Move2 = shadowPunch
+Move2 = rageFist
+Move2 = bodySlam
+Move2 = psybeam
+Move2 = quickAttack
+Move2 = shadowBall
+Move2 = payback
+Move2 = megaKick
+Move2 = tackle
+Move2 = takeDown
+Move2 = zenHeadbutt
+Move2 = snarl
+Move2 = lick
+Move2 = bite
+
+
+% Find all possible move “turns” that would make the first annihilape do more damage to the second one
+?- moreEffectiveMove(annihilape, MV1, annihilape, MV2).
+MV1 = shadowPunch,
+MV2 = lowKick
+MV1 = shadowPunch,
+MV2 = bodySlam
+MV1 = rageFist,
+MV2 = lowKick
+MV1 = rageFist,
+MV2 = bodySlam
+
+% Find all possible move “turns” that would make an annihilape do more damage to an espathra
+?- moreEffectiveMove(annihilape, MV1, espathra, MV2).
+MV1 = lowKick,
+MV2 = quickAttack
+MV1 = MV2, MV2 = lowKick
+MV1 = shadowPunch,
+MV2 = psybeam
+MV1 = shadowPunch,
+MV2 = quickAttack
+MV1 = shadowPunch,
+MV2 = lowKick
+MV1 = rageFist,
+MV2 = psybeam
+MV1 = rageFist,
+MV2 = quickAttack
+MV1 = rageFist,
+MV2 = lowKick
+MV1 = bodySlam,
+MV2 = quickAttack
+MV1 = bodySlam,
+MV2 = lowKick
+
+% Find all possible moves that annihilape could use against all possible opponents using lowKick that would lead to annihilape doing more damage
+?- moreEffectiveMove(annihilape, MV1, MO2, lowKick).
+MO2 = espathra,
+MV1 = lowKick
+MO2 = flamigo,
+MV1 = lowKick
+MO2 = annihilape,
+MV1 = shadowPunch
+MO2 = espathra,
+MV1 = shadowPunch
+MO2 = flamigo,
+MV1 = shadowPunch
+MO2 = annihilape,
+MV1 = rageFist
+MO2 = espathra,
+MV1 = rageFist
+MO2 = flamigo,
+MV1 = rageFist
+MO2 = espathra,
+MV1 = bodySlam
+MO2 = flamigo,
+MV1 = bodySlam
